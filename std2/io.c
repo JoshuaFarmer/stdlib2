@@ -57,15 +57,11 @@ bool input(
 	bool echo
 ) {
 	if (!p || !*p) return false;
-	initTermios(false);
 
 	char c;
-	
-	// Can't be like scanf, as it changes the memory! <Vector in C rise up>
 	while ((c = getch_(echo)) && c != '\n') {
 		push(p, &c, ARR_CHAR, 1);
 	}
 
-	resetTermios();
 	return true;
 }

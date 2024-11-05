@@ -19,7 +19,7 @@ void insert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n);
 void pop(Array* arr);
 void popx(Array* arr, size_t n);
 int compare(Array a, Array b);
-Array split( const char* _data, char* delim);
-void strip( char* str, char x);
+Array split(const char* _data, char* delim);
+void strip(char* str, char x);
 
 #endif
