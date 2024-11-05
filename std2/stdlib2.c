@@ -1,7 +1,7 @@
 #include <std2/stdlib2.h>
 
 const size_t ArrayElemSizes[] = {
-	-1, -1, 4, 4, 4, -1, sizeof(_Array)
+	-1, -1, 4, 4, 4, -1, sizeof(_Array), 1
 };
 
 void test() {
@@ -61,6 +61,10 @@ int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i) {
 			_printArray(arr0);
 			}
 			break;
+		case ARR_CHAR: {
+			char v = arr->Data[e][i];
+			printf("'%c'", v);
+			} break;
 	}
 	return ret;
 }

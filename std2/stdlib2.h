@@ -11,6 +11,7 @@
 #include "types.h"
 #include "files.h"
 #include "array.h"
+#include "io.h"
 
 #define foreach(y,x) \
 	char* y;\
