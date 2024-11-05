@@ -9,7 +9,6 @@ void test() {
 }
 
 void _printArray(Array, ...);
-void strip(char*,char);
 
 int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i) {
 	int ret = 1;
@@ -51,7 +50,7 @@ int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i) {
 			break;
 		case ARR_CSTRING: {
 			char* x = strdup((char*)arr->Data[e]);
-			strip(x, '\r');
+			stripCStr(x, '\r');
 			printf("\"%s\"", x);
 			free(x);
 			}

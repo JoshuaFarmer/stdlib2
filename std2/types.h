@@ -162,7 +162,6 @@ typedef enum {
 	printf("\n"); \
 }
 
-void strip(char*,char);
 int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i);
 void _printArray(Array arr, ...);
 void _printIntP(int* i, ...);

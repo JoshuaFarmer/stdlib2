@@ -20,6 +20,7 @@ void pop(Array* arr);
 void popx(Array* arr, size_t n);
 int compare(Array a, Array b);
 Array split(const char* _data, char* delim);
-void strip(char* str, char x);
+void stripCStr(char* str, char x);
+void strip(Array arr, Array out, char c);
 
 #endif

@@ -10,6 +10,9 @@ int main() {
 	bool res = input(&arr, true);
 	if (res)
 		print(arr);
+	Array arr2 = newA(0);
+	strip(arr, arr2, ',');
+	print(arr2);
 	delA(arr);
 	return 0;
 }

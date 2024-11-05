@@ -191,7 +191,7 @@ Array split(
 	return arr;
 }
 
-void strip(
+void stripCStr(
 	char* str,
 	char x
 ) {
@@ -209,4 +209,21 @@ void strip(
 		src++; // Move to the next character in the source
 	}
 	*dst = '\0'; // Null-terminate the modified string
+}
+
+void strip(
+	Array arr,
+	Array out,
+	char c
+) {
+	if (!arr || !c || (arr->ElemCount == 0) || !out) return; // Check for null input or invalid character
+
+	for (size_t i = 0; i < arr->ElemCount; ++i) {
+		for (size_t x = 0; x < arr->ElemSize[i]; ++x) {
+			if (at(arr, i)[x] != c) {
+				char c = at(arr, i)[x];
+				push(&out, &c, ARR_CHAR, 1);
+			}
+		}
+	}
 }
