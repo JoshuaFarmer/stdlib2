@@ -24,5 +24,6 @@ int compare(Array a, Array b);
 Array split(const char* _data, char* delim);
 void stripCStr(char* str, char x);
 void strip(Array arr, Array out, char c);
+Array clone(Array arr);
 
 #endif

@@ -263,3 +263,16 @@ void strip(
 		}
 	}
 }
+
+Array clone(Array in) {
+	if (!in) return NULL;
+	Array arr = newA(0);
+	if (!arr) return NULL;
+
+	for (size_t x = 0; x < in->ElemCount; ++x)
+	{
+		vpush(&arr, in->Data[x], in->ElemType[x], in->ElemSize[x]);
+	}
+
+	return arr;
+}

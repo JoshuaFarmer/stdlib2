@@ -1,7 +1,7 @@
-gcc -c "src/array.c" -o "bin/array.o" -Wall -Wextra -I "./inc" -g -march=x86-64
-gcc -c "src/files.c" -o "bin/files.o" -Wall -Wextra -I "./inc" -g -march=x86-64
-gcc -c "src/io.c" -o "bin/io.o" -Wall -Wextra -I "./inc" -g -march=x86-64
-gcc -c "src/linked.c" -o "bin/linked.o" -Wall -Wextra -I "./inc" -g -march=x86-64
+gcc -c "src/array.c" -o "bin/array.o" -Wall -Wextra -I "./inc" -g -march=x86-64 -Wpedantic
+gcc -c "src/files.c" -o "bin/files.o" -Wall -Wextra -I "./inc" -g -march=x86-64 -Wpedantic
+gcc -c "src/io.c" -o "bin/io.o" -Wall -Wextra -I "./inc" -g -march=x86-64 -Wpedantic
+gcc -c "src/linked.c" -o "bin/linked.o" -Wall -Wextra -I "./inc" -g -march=x86-64 -Wpedantic
 
 gcc -c "src/stdlib2.c" -o "bin/std2.o" -Wall -Wextra -I "./inc" -g -march=x86-64
 
