@@ -40,6 +40,12 @@ int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i) {
 			printf("%.4x", r);
 			}
 			break;
+		case ARR_SHORT: {
+			int r = arr->Data[e][i];
+			r |= arr->Data[e][i+1] << 8;
+			printf("%.4x", r);
+			}
+			break;
 		case ARR_FLOAT: {
 			int r = arr->Data[e][i];
 			r |= arr->Data[e][i+1] << 8;
@@ -79,21 +85,44 @@ void _printArray(Array arr, ...) {
 	for (size_t i = 0; i < arr->ElemCount; ++i) {
 		if (arr->ElemSize[i] == 0) {
 			printf("None");
-		} else if (arr->ElemSize[i] == 1) {
-			_printArrayElem(arr->ElemType[i], arr, i, 0);
-		} else {
-			if (arr->ElemType[i] == ARR_BYTE)
-				printf("{");
-			for (size_t x = 0; x < arr->ElemSize[i]; ++x) {
-				if (_printArrayElem(arr->ElemType[i], arr, i, x)) {
-					x = arr->ElemSize[i];
-				}
-				if (x < arr->ElemSize[i]-1)
-					printf(", ");
-			}
-			if (arr->ElemType[i] == ARR_BYTE)
-				printf("}");
+			continue;
 		}
+
+		switch (arr->ElemType[i]) {
+			case ARR_OTHER:
+			case ARR_BYTE:
+				printf("%.2x", (char)*arr->Data[i]);
+				break;
+			case ARR_CHAR:
+				printf("%c", (char)*arr->Data[i]);
+				break;
+			case ARR_SHORT:
+				printf("%.4x", (uint16_t)*arr->Data[i]);
+				break;
+			case ARR_INT:
+				printf("%d", (int)*arr->Data[i]);
+				break;
+			case ARR_FLOAT:
+				printf("%f", (float)*arr->Data[i]);
+				break;
+			case ARR_HEX:
+				printf("%.8x", (int)*arr->Data[i]);
+				break;
+			case ARR_ARRAY: {
+				Array arr2 = *((Array*)(void*)arr->Data[i]);
+				_printArray(arr2);
+				break;
+			}
+			case ARR_CSTRING: {
+				for (size_t x = 0; x < arr->ElemSize[i]; ++x)
+					_print((char)arr->Data[i][x]);
+				break;
+			}
+
+			default:
+				break;
+		}
+	
 		if (i < arr->ElemCount-1)
 			printf(", ");
 	}

@@ -6,6 +6,41 @@
 #include <string.h>
 #include "array.h"
 
+size_t get_size_from_type(ArrayElem_t ty, const void* p) {
+	switch (ty) {
+		// 8 bit
+		case ARR_OTHER:
+		case ARR_CHAR:
+		case ARR_BYTE:
+			return 1;
+
+		// 16 bit
+		case ARR_SHORT:
+			return 2;
+
+		// 32 bit
+		case ARR_INT:
+		case ARR_FLOAT:
+		case ARR_HEX:
+			return 4;
+
+		// var length
+		case ARR_CSTRING:	{
+			if (!p) return 0;
+			return strnlen(p, (1 << 16));
+		}
+
+		case ARR_ARRAY: {
+			if (!p) return 0;
+			Array arr = (Array)p;
+			return arr->ElemCount;
+		}
+
+		default:
+			return sizeof(p);
+	}
+}
+
 Array newA(size_t count) {
 	Array arr = (Array)malloc(sizeof(_Array));
 	if (!arr) return NULL;
@@ -67,36 +102,6 @@ void vpush(Array* arr, void* data, ArrayElem_t ty, size_t s) {
 	// del old
 	delA(oldArr);
 	*arr = newArr;
-}
-
-size_t get_size_from_type(ArrayElem_t ty, const void* p) {
-	switch (ty) {
-		// 8 bit
-		case ARR_OTHER:
-		case ARR_CHAR:
-		case ARR_BYTE:		return 1;
-
-		// 16 bit
-		case ARR_SHORT:	return 2;
-
-		// 32 bit
-		case ARR_INT:
-		case ARR_FLOAT:
-		case ARR_HEX:		return 4;
-
-		// var length
-		case ARR_CSTRING:	{
-			if (!p) return 0;
-			return strnlen(p, (1 << 16));
-		}
-
-		case ARR_ARRAY: {
-			if (!p) return 0;
-			Array arr = (Array)p;
-			if (!arr->Data || !arr->ElemSize || !arr->ElemType || arr->ElemCount == 0) return 0;
-			return arr->ElemCount;
-		}
-	}
 }
 
 void push(Array* arr, void* data, ArrayElem_t ty) {
