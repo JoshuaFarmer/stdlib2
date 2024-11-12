@@ -169,8 +169,11 @@ void _printChar(char c, ...) {
 
 void _printLinked(Linked list, ...)
 {
-	if (!list) return;
-	_printArray(list->value);
+	while (list != NULL)
+	{
+		_printArray(list->value);
+		list = list->Next;
+	}
 }
 
 // Initialization functions with variable arguments
