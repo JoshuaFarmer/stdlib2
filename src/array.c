@@ -42,7 +42,7 @@ void* memdup(void* dat, size_t size) {
 	return dat1;
 }
 
-void push(Array* arr, void* data, ArrayElem_t ty, size_t s) {
+void vpush(Array* arr, void* data, ArrayElem_t ty, size_t s) {
 	if (!arr || !*arr || !data) return;
 
 	Array oldArr = *arr;
@@ -69,7 +69,44 @@ void push(Array* arr, void* data, ArrayElem_t ty, size_t s) {
 	*arr = newArr;
 }
 
-void insert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n) {
+size_t get_size_from_type(ArrayElem_t ty, const void* p) {
+	switch (ty) {
+		// 8 bit
+		case ARR_OTHER:
+		case ARR_CHAR:
+		case ARR_BYTE:		return 1;
+
+		// 16 bit
+		case ARR_SHORT:	return 2;
+
+		// 32 bit
+		case ARR_INT:
+		case ARR_FLOAT:
+		case ARR_HEX:		return 4;
+
+		// var length
+		case ARR_CSTRING:	{
+			if (!p) return 0;
+			return strnlen(p, (1 << 16));
+		}
+
+		case ARR_ARRAY: {
+			if (!p) return 0;
+			Array arr = (Array)p;
+			if (!arr->Data || !arr->ElemSize || !arr->ElemType || arr->ElemCount == 0) return 0;
+			return arr->ElemCount;
+		}
+	}
+}
+
+void push(Array* arr, void* data, ArrayElem_t ty) {
+	if (!arr || !*arr || !data) return;
+
+	size_t size = get_size_from_type(ty, data);
+	vpush(arr, data, ty, size);
+}
+
+void vinsert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n) {
 	if (!arr || !*arr || !data) return;
 
 	Array oldArr = *arr;
@@ -99,6 +136,12 @@ void insert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n) {
 	// Delete old array
 	delA(oldArr);
 	*arr = newArr;
+}
+
+void insert(Array* arr, void* data, ArrayElem_t ty, size_t n) {
+	if (!arr || !*arr || !data) return;
+	size_t size = get_size_from_type(ty, data);
+	vinsert(arr, data, ty, size, n);
 }
 
 void pop(Array* arr) {
@@ -132,11 +175,11 @@ void popx(Array* arr, size_t n) {
 	Array newArr = newA(0);
 
 	for (size_t i = 0; i < n; ++i) {
-		push(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
+		vpush(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
 	}
 
 	for (size_t i = n+1; i < oldArr->ElemCount; ++i) {
-		push(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
+		vpush(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
 	}
 
 	// Delete old
@@ -172,7 +215,7 @@ Array split(
 	char* pch = strtok(data, delim);
 	while (pch != NULL)
 	{
-		push(&arr, pch, ARR_CSTRING, strlen(pch));
+		vpush(&arr, pch, ARR_CSTRING, strlen(pch));
 		pch = strtok(NULL, delim);
 	}
 	sfree(data);
@@ -210,7 +253,7 @@ void strip(
 		for (size_t x = 0; x < arr->ElemSize[i]; ++x) {
 			if (at(arr, i)[x] != c) {
 				char c = at(arr, i)[x];
-				push(&out, &c, ARR_CHAR, 1);
+				vpush(&out, &c, ARR_CHAR, 1);
 			}
 		}
 	}

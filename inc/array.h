@@ -14,8 +14,10 @@ void* memdup(void* dat, size_t size);
 
 Array newA(size_t count);
 void delA(Array arr);
-void push(Array* arr, void* data, ArrayElem_t ty, size_t s);
-void insert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n);
+void push(Array* arr, void* data, ArrayElem_t ty);
+void insert(Array* arr, void* data, ArrayElem_t ty, size_t n);
+void vinsert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n);	// custom length (DISCOURAGED OUTSIDE OF STRUCTS)
+void vpush(Array* arr, void* data, ArrayElem_t ty, size_t s);					// custom length (DISCOURAGED OUTSIDE OF STRUCTS)
 void pop(Array* arr);
 void popx(Array* arr, size_t n);
 int compare(Array a, Array b);

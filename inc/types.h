@@ -61,6 +61,7 @@ typedef struct {
 
 typedef enum {
 	ARR_BYTE,
+	ARR_SHORT,
 	ARR_CSTRING,
 	ARR_INT,
 	ARR_HEX,

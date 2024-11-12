@@ -100,7 +100,6 @@ void _printArray(Array arr, ...) {
 	printf("}");
 
 	if (_ == 0) {
-		printf("\n");
 		in = 0;
 	}
 }
@@ -169,11 +168,16 @@ void _printChar(char c, ...) {
 
 void _printLinked(Linked list, ...)
 {
+	printf("(");
 	while (list != NULL)
 	{
 		_printArray(list->value);
 		list = list->Next;
+		if (list != NULL) {
+			printf(", ");
+		}
 	}
+	printf(")");
 }
 
 // Initialization functions with variable arguments

@@ -63,7 +63,7 @@ bool input(
 		if (c == 127 || c == '\b') {
 			pop(p);
 		} else {
-			push(p, &c, ARR_CHAR, 1);
+			push(p, &c, ARR_CHAR);
 		}
 	}
 

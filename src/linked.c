@@ -4,9 +4,11 @@
 static Linked find_last_element(Linked list)
 {
 	Linked elem = list;
-	while (elem != NULL)
+	Linked next = list->Next;
+	while (next != NULL)
 	{
-		elem = elem->Next;
+		elem = next;
+		next = elem->Next;
 	}
 
 	return elem;
@@ -15,7 +17,10 @@ static Linked find_last_element(Linked list)
 void append_node(Linked list, Array value)
 {
 	Linked last = find_last_element(list);
-	if (!last) return;
+	if (!last) {
+		printf("Failed to append at: %p\n", list);
+		return;
+	}
 	
 	Linked new = calloc(1, sizeof(_Node));
 	last->Next = new;
