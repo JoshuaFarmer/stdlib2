@@ -60,7 +60,11 @@ bool input(
 
 	char c;
 	while ((c = getch_(echo)) && c != '\n') {
-		push(p, &c, ARR_CHAR, 1);
+		if (c == 127 || c == '\b') {
+			pop(p);
+		} else {
+			push(p, &c, ARR_CHAR, 1);
+		}
 	}
 
 	return true;

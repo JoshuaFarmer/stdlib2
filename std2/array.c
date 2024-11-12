@@ -70,27 +70,30 @@ void push(Array* arr, void* data, ArrayElem_t ty, size_t s) {
 }
 
 void insert(Array* arr, void* data, ArrayElem_t ty, size_t s, size_t n) {
-	if (!arr || !*arr || !data || n > (*arr)->ElemCount) return;
+	if (!arr || !*arr || !data) return;
 
 	Array oldArr = *arr;
-	Array newArr = newA(oldArr->ElemCount + 1);
-	if (!newArr) return; // Check for allocation failure
+	if (n > oldArr->ElemCount) return;
 
-	// Copy sizes and types before the insertion point
-	memcpy(newArr->ElemSize, oldArr->ElemSize, n * sizeof(size_t));
-	memcpy(newArr->ElemType, oldArr->ElemType, n * sizeof(ArrayElem_t));
+	Array newArr = newA(oldArr->ElemCount + 1); // Allocate space for the new array
 
-	// Insert the new element's size, type, and data
+	// Copy elements before the insertion point
+	for (size_t i = 0; i < n; ++i) {
+		newArr->Data[i] = memdup(oldArr->Data[i], oldArr->ElemSize[i]);
+		newArr->ElemSize[i] = oldArr->ElemSize[i];
+		newArr->ElemType[i] = oldArr->ElemType[i];
+	}
+
+	// Insert the new element
+	newArr->Data[n] = memdup(data, s);
 	newArr->ElemSize[n] = s;
 	newArr->ElemType[n] = ty;
-	newArr->Data[n] = (u8)memdup(data, s);
 
-	// Copy sizes, types, and data after the insertion point
-	memcpy(newArr->ElemSize + n + 1, oldArr->ElemSize + n, (oldArr->ElemCount - n) * sizeof(size_t));
-	memcpy(newArr->ElemType + n + 1, oldArr->ElemType + n, (oldArr->ElemCount - n) * sizeof(ArrayElem_t));
-
-	for (size_t i = n + 1; i < newArr->ElemCount; ++i) {
-		newArr->Data[i] = (u8)memdup(oldArr->Data[i - 1], oldArr->ElemSize[i - 1]);
+	// Copy the remaining elements
+	for (size_t i = n; i < oldArr->ElemCount; ++i) {
+		newArr->Data[i + 1] = memdup(oldArr->Data[i], oldArr->ElemSize[i]);
+		newArr->ElemSize[i + 1] = oldArr->ElemSize[i];
+		newArr->ElemType[i + 1] = oldArr->ElemType[i];
 	}
 
 	// Delete old array
@@ -125,30 +128,15 @@ void pop(Array* arr) {
 void popx(Array* arr, size_t n) {
 	if (!arr || !*arr) return;
 	Array oldArr = *arr;
-	if (n >= oldArr->ElemCount) return;
-	Array newArr = newA(oldArr->ElemCount - 1);
+	if (n > oldArr->ElemCount) return;
+	Array newArr = newA(0);
 
-	// Copy sizes (Before the Element)
-	memcpy(newArr->ElemSize,
-			 oldArr->ElemSize,
-			 n * sizeof(size_t));
-	// Copy sizes (After the Element)
-	memcpy(newArr->ElemSize + n,
-			 oldArr->ElemSize + n + 1,
-			 (oldArr->ElemCount - n - 1) * sizeof(size_t));
+	for (size_t i = 0; i < n; ++i) {
+		push(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
+	}
 
-	// Copy types
-	memcpy(newArr->ElemType,
-			 oldArr->ElemType,
-			 n * sizeof(ArrayElem_t));
-	// Copy sizes (After the Element)
-	memcpy(newArr->ElemType + n,
-			 oldArr->ElemType + n + 1,
-			 (oldArr->ElemCount - n - 1) * sizeof(ArrayElem_t));
-
-	// Copy data
-	for (size_t i = 0; i < newArr->ElemCount; ++i) {
-		newArr->Data[i] = (u8)memdup(oldArr->Data[i + (i >= n)], oldArr->ElemSize[i + (i >= n)]);
+	for (size_t i = n+1; i < oldArr->ElemCount; ++i) {
+		push(&newArr, oldArr->Data[i], oldArr->ElemType[i], oldArr->ElemSize[i]);
 	}
 
 	// Delete old

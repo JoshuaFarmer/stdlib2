@@ -8,11 +8,10 @@ int main() {
 	// get input (appends so it safe, 100%)
 	// its (Array*, Echo?<bool>)
 	bool res = input(&arr, true);
-	if (res)
-		print(arr);
-	Array arr2 = newA(0);
-	strip(arr, arr2, ',');
-	print(arr2);
+	insert(&arr, "Hello, World!\0", ARR_CSTRING, 14, 1);
+	print(arr);
+	popx(&arr, 1);
+	print(arr);
 	delA(arr);
 	return 0;
 }
