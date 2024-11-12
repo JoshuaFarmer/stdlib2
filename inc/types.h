@@ -87,6 +87,15 @@ typedef _Vec4i* Vec4i;
 typedef _Array* Array;
 typedef _Array* String;
 
+typedef struct _Node_s {
+	Array value;
+	struct _Node_s* Next;
+	struct _Node_s* Prev;
+} _Node;
+
+typedef _Node* Linked;
+#include "linked.h"
+
 typedef struct { int is_void; void* data; size_t length; } Something;
 #define Void (Something){1, NULL, 0};
 #define Smth(x) (Something){0, x, sizeof(x)}
@@ -143,7 +152,8 @@ typedef enum {
 	char*: _printString, \
 	const char*: _printString, \
 	char: _printChar, \
-	Array: _printArray \
+	Array: _printArray, \
+	Linked: _printLinked \
 )(value, ##__VA_ARGS__, -1, NULL)
 
 #define _print(value) _Generic((value), \
@@ -154,6 +164,7 @@ typedef enum {
 	const char*: _printString, \
 	char: _printChar, \
 	Array: _printArray, \
+	Linked: _printLinked, \
 	default: _printInt \
 )(value, -1, NULL)
 
@@ -169,6 +180,7 @@ void _printInt(int i, ...);
 void _printDouble(double d, ...);
 void _printString(char* str, ...);
 void _printChar(char c, ...);
+void _printLinked(Linked list, ...);
 
 #define is_null(x) (x == NULL)
 

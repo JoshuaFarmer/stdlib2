@@ -167,6 +167,12 @@ void _printChar(char c, ...) {
 	va_end(args);
 }
 
+void _printLinked(Linked list, ...)
+{
+	if (!list) return;
+	_printArray(list->value);
+}
+
 // Initialization functions with variable arguments
 void initInt(int* value, ...) {
 	va_list args;
@@ -192,3 +198,4 @@ void initString(char** value, ...) {
 void initGeneric(void* value, ...) {
 	printf("Unsupported type, at: %p\n", value);
 }
+

@@ -12,6 +12,7 @@
 #include "files.h"
 #include "array.h"
 #include "io.h"
+#include "linked.h"
 
 #define foreach(y,x) \
 	char* y;\
