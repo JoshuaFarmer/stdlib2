@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include "array.h"
+#include "linked.h"
 
 size_t get_size_from_type(ArrayElem_t ty, const void* p) {
 	switch (ty) {
@@ -31,9 +32,11 @@ size_t get_size_from_type(ArrayElem_t ty, const void* p) {
 		}
 
 		case ARR_ARRAY: {
-			if (!p) return 0;
-			Array arr = (Array)p;
-			return arr->ElemCount;
+			return sizeof(Array);
+		}
+
+		case ARR_LINKED: {
+			return sizeof(Linked);
 		}
 
 		default:

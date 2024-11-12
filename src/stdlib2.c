@@ -16,6 +16,11 @@ int _printArrayElem(ArrayElem_t ty, Array arr, size_t e, int i) {
 	if (ArrayElemSizes[ty] != (unsigned long long)-1 && ArrayElemSizes[ty] != arr->ElemSize[e])
 		return ret;
 	switch (ty) {
+		case ARR_LINKED: {
+			Linked l = (Linked)arr->Data[e];
+			_printLinked(l);
+			}
+			break;
 		case ARR_OTHER:
 			printf("%.2x", arr->Data[e][i]);
 			ret = 0;
@@ -118,7 +123,12 @@ void _printArray(Array arr, ...) {
 					_print((char)arr->Data[i][x]);
 				break;
 			}
-
+			case ARR_LINKED: {
+				Linked arr2 = *((Linked*)(void*)arr->Data[i]);
+				printf("DEBUG1: %p\n", arr2);
+				_printLinked(arr2);
+				break;
+			}
 			default:
 				break;
 		}

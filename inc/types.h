@@ -69,6 +69,7 @@ typedef enum {
 	ARR_OTHER, // use type casting
 	ARR_ARRAY,
 	ARR_CHAR,
+	ARR_LINKED,
 } ArrayElem_t;
 
 typedef struct _s_Array {
